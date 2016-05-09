@@ -1,9 +1,12 @@
 Package: cleanR
-Type: Package
-Title: What the package does (short line)
-Version: 1.0
-Date: 2016-05-08
-Author: Who wrote it
-Maintainer: Who to complain to <yourfault@somewhere.net>
-Description: More about what it does (maybe more than one line)
+Title: What the package does (one line)
+Version: 0.1
+Authors@R: "First Last <first.last@example.com> [aut, cre]"
+Description: What the package does (one paragraph)
+Depends: R (>= 3.1.1)
 License: What license is it under?
+LazyData: true
+Imports: foreign, stringr, dplyr, sp
+Packaged: 2014-12-01 01:02:01 UTC; Adam
+Author: "First Last" [aut, cre]
+Maintainer: "First Last" <first.last@example.com>

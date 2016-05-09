@@ -22,7 +22,7 @@ dat_sel <- function(type, year, vars = NULL) {
     dpath <- paste0(home, '/Box Sync/data/icpsr_voting/')
     vlu_sub <- subset(vlu, YEAR == year & TYPE == type)
     d_lst <- lapply(1:NROW(vlu_sub), function(x) {
-      v <- ifelse(vlu_sub[x, ]$STATE == "NC", "V", "v")
+      v <- ifelse(vlu_sub[x, ]$STATE %in% c("NC", "KS", "NE"), "V", "v")
       dnum <- vlu_sub$FILE[x]
       vnum <- vlu_sub[x, 5:NCOL(vlu_sub)]
       vnum_sub <- vnum[which(!is.na(vnum))]

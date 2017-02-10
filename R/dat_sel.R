@@ -6,7 +6,7 @@ dat_sel <- function(type, year, vars = NULL) {
     xwlk[xwlk$ID_NUM == 10465, 'REL'] <- 38083000
     xwlk[xwlk$ID_NUM == 13489, 'REL'] <- 46107199    
   }
-  if (!type %in% c('pop', 'rep')) {
+  if (!type %in% c('pop', 'rep', 'dem')) {
     dpath <- paste0(home, '/Box Sync/data/haines/')
     dnum <- clu[which(clu$TYPE == type & clu$YEAR == year), 'FILE']
     fpath <- paste0(dpath, 'DS00', dnum)

@@ -32,13 +32,13 @@ dat_sel <- function(type, year, vars = NULL) {
       fname <- list.files(fpath, '.dta')
       d <- foreign::read.dta(paste0(fpath, '/', fname))
       d[, "VOTE"] <- d[, paste0(v, 1)] * 1e+06 + d[, paste0(v, 3)] * 100
+      d$VOTE[d$VOTE == 32135000 & d[, paste0(v, 2)] == 'NEOSHO/DORN'] <- 32133000
+      d$VOTE[d$VOTE == 32137000 & d[, paste0(v, 2)] == 'NESS'] <- 32135000
       d[, names(vnum)] <- NA
       d[, names(vnum_sub)] <- d[, paste0(v, vnum_sub)]
       d[, c('VOTE', names(vnum))]
     })
     d <- do.call('rbind', d_lst)
-    d$VOTE[d$VOTE == 32135000 & d$name == 'NEOSHO/DORN'] <- 32133000
-    d$VOTE[d$VOTE == 32137000 & d$name == 'NESS'] <- 32135000
   }
   d$YEAR <- year
   result <- dplyr::left_join(xwlk, d, na_matches = "never")

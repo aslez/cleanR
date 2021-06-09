@@ -2,6 +2,8 @@ dat_sel <- function(type, year, vars = NULL) {
   rloc <- path.expand(paste0('~', R.home()))
   home <- stringr::str_extract(rloc, '/Users/(.*?)/')
   xwlk <- subset(ctyXwalk, YEAR == year)
+  xwlk[xwlk$ID_NUM == 6010, 'VOTE'] <- 32133000
+  xwlk[xwlk$ID_NUM == 6012, 'VOTE'] <- 32135000
   if (year == 1890) {
     xwlk[xwlk$ID_NUM == 10465, 'REL'] <- 38083000
     xwlk[xwlk$ID_NUM == 13489, 'REL'] <- 46107199    
@@ -35,9 +37,11 @@ dat_sel <- function(type, year, vars = NULL) {
       d[, c('VOTE', names(vnum))]
     })
     d <- do.call('rbind', d_lst)
+    d$VOTE[d$VOTE == 32135000 & d$name == 'NEOSHO'] <- 32133000
+    d$VOTE[d$VOTE == 32137000 & d$name == 'NESS'] <- 32135000
   }
   d$YEAR <- year
-  result <- dplyr::left_join(xwlk, d)
+  result <- dplyr::left_join(xwlk, d, na_matches = "never")
   if (!is.null(vars)) {
     result <- result[, c('ID_NUM', 'FIPS', 'NAME', 'STATE_TERR', vars)]
   }

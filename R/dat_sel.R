@@ -37,7 +37,7 @@ dat_sel <- function(type, year, vars = NULL) {
       d[, c('VOTE', names(vnum))]
     })
     d <- do.call('rbind', d_lst)
-    d$VOTE[d$VOTE == 32135000 & d$name == 'NEOSHO'] <- 32133000
+    d$VOTE[d$VOTE == 32135000 & d$name == 'NEOSHO/DORN'] <- 32133000
     d$VOTE[d$VOTE == 32137000 & d$name == 'NESS'] <- 32135000
   }
   d$YEAR <- year

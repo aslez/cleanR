@@ -45,5 +45,14 @@ dat_sel <- function(type, year, vars = NULL) {
   if (!is.null(vars)) {
     result <- result[, c('ID_NUM', 'FIPS', 'NAME', 'STATE_TERR', vars)]
   }
+  
+  #fix bad presidential voting data with info from Leip
+  if (year == 1892) {
+    result$PRST_1_1[result$FIPS == 20053000] <- 2213
+    result$PRST_1_1[result$FIPS == 20189000] <- 270
+    if (type == "pop") {
+      result$PRSV_1_1[result$FIPS == 20189000] <- 185
+    }
+  }
   result
 }

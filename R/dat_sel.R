@@ -54,5 +54,10 @@ dat_sel <- function(type, year, vars = NULL) {
       result$PRSV_1_1[result$FIPS == 20189000] <- 185
     }
   }
+  
+  #replace zeros with NA for MN districts 1 and 4 in 1890
+  if (year == 1890 & type == "pop") {
+    result$CONV_1_1[result$STATE_TERR == "Minnesota" & result$CDIST_0_1 %in% c(1, 4)] <- NA
+  }
   result
 }

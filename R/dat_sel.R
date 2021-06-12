@@ -36,28 +36,37 @@ dat_sel <- function(type, year, vars = NULL) {
       d$VOTE[d$VOTE == 32137000 & d[, paste0(v, 2)] == 'NESS'] <- 32135000
       d[, names(vnum)] <- NA
       d[, names(vnum_sub)] <- d[, paste0(v, vnum_sub)]
-      d[, c('VOTE', names(vnum))]
+      
+      #add district endorsement information
+      flu_sub <- flu[flu$STATE == vlu_sub[x, "STATE"] & flu$YEAR == year, ]
+      d$CDIST_0_1[d[, paste0(v, 1)] %in% 36:37] <- 1
+      d$CDIST_0_1[d$VOTE == 35015000] <- 6 #Boyd, NE
+      d$CDIST_0_1[d$VOTE == 35071000] <- 7 #Garfield, KS
+      d$CDIST_0_1[d$VOTE == 33135000] <- 7 #Roseau, MN
+      d$CD_STAT <- flu_sub$STATUS[match(d$CDIST_0_1, flu_sub$DISTRICT)]
+      
+      #replace zeros with NA for MN districts 1 and 4 in 1890
+      if (year == 1890 & type == 'pop') {
+        d$CONV_1_1[d[, paste0(v, 1)] == 33 & d$CDIST_0_1 %in% c(1, 4)] <- NA
+      }
+      
+      #fix bad presidential voting data with info from Leip
+      if (year == 1892) {
+        d$PRST_1_1[d$VOTE == 32053000] <- 2213
+        d$PRST_1_1[d$VOTE == 32189000] <- 270
+        if (type == 'pop') {
+          d$PRSV_1_1[d$VOTE == 32189000] <- 185
+        }
+      }
+      
+      d[, c('VOTE', 'CD_STAT', names(vnum))]
     })
     d <- do.call('rbind', d_lst)
   }
   d$YEAR <- year
-  result <- dplyr::left_join(xwlk, d, na_matches = "never")
+  result <- dplyr::left_join(xwlk, d, na_matches = 'never')
   if (!is.null(vars)) {
     result <- result[, c('ID_NUM', 'FIPS', 'NAME', 'STATE_TERR', vars)]
-  }
-  
-  #fix bad presidential voting data with info from Leip
-  if (year == 1892) {
-    result$PRST_1_1[result$FIPS == 20053000] <- 2213
-    result$PRST_1_1[result$FIPS == 20189000] <- 270
-    if (type == "pop") {
-      result$PRSV_1_1[result$FIPS == 20189000] <- 185
-    }
-  }
-  
-  #replace zeros with NA for MN districts 1 and 4 in 1890
-  if (year == 1890 & type == "pop") {
-    result$CONV_1_1[result$STATE_TERR == "Minnesota" & result$CDIST_0_1 %in% c(1, 4)] <- NA
   }
   result
 }
